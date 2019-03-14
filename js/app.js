@@ -25,6 +25,38 @@ function shuffle(array) {
     return array;
 }
 
+function startnew(array) {
+ /* this function is going to take the deck, run it through the shuffle function, and then output into the deck list */ 
+    }
+
+function clickACard(cardItem) {
+    /* This function will fire when the user clicks a card and flip the card over, add identify of flipped card to flipList */
+}
+
+function 
+
+var deckOfCards = {"fa-diamond",
+                   "fa-paper-plane-o",
+                   "fa-anchor",
+                   "fa-bolt",
+                   "fa-cube",
+                   "fa-anchor",
+                   "fa-leaf",
+                   "fa-bicycle",
+                   "fa-diamond,
+                   "fa-bomb",
+                   "fa-leaf",
+                   "fa-bomb",
+                   "fa-bolt",
+                   "fa-bicycle",
+                   "fa-paper-plane-o",
+                   "fa-cube"}
+startnew(deckOfCards);
+var newGame = document.querySelector('restart');
+newGame.addEventListener("click", startnew); /* click listener on the start button
+
+
+
 
 /*
  * set up the event listener for a card. If a card is clicked:

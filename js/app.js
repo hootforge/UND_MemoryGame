@@ -1,6 +1,10 @@
 /*
  * Create a list that holds all of your cards
  */
+var deckOfCards = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube",
+                   "fa-anchor", "fa-leaf", "fa-bicycle", "fa-diamond", "fa-bomb", 
+                   "fa-leaf", "fa-bomb", "fa-bolt", "fa-bicycle", "fa-paper-plane-o", "fa-cube"];
+
 
 
 /*
@@ -27,6 +31,16 @@ function shuffle(array) {
 
 function startnew(array) {
  /* this function is going to take the deck, run it through the shuffle function, and then output into the deck list */ 
+    var shuffledDeck = document.querySelector("Deck");
+    while (shuffledDeck.firstChild){
+    	shuffledDeck.removeChild(shuffledDeck.firstChild);
+    }
+    var shuffled = shuffle(array);
+    
+    for (let card of shuffled){
+        var nextUp = document.createTextNode("<li class=\"card\"> <i class=\"fa\" " + card + "></i></li> ")
+        shuffledDeck.appendChild(nextUp);
+    }
     }
 
 function clickACard(cardItem) {
@@ -35,25 +49,14 @@ function clickACard(cardItem) {
 
 function 
 
-var deckOfCards = {"fa-diamond",
-                   "fa-paper-plane-o",
-                   "fa-anchor",
-                   "fa-bolt",
-                   "fa-cube",
-                   "fa-anchor",
-                   "fa-leaf",
-                   "fa-bicycle",
-                   "fa-diamond,
-                   "fa-bomb",
-                   "fa-leaf",
-                   "fa-bomb",
-                   "fa-bolt",
-                   "fa-bicycle",
-                   "fa-paper-plane-o",
-                   "fa-cube"}
-startnew(deckOfCards);
+
+
+startnew(deckOfCards); /* initializes new game */ 
+
 var newGame = document.querySelector('restart');
-newGame.addEventListener("click", startnew); /* click listener on the start button
+var cardArray = document.querySelector("deck");
+newGame.addEventListener("click", startnew); /* click listener on the start button*/
+cardArray.addEventListener("click", cardClicked);
 
 
 

@@ -7,6 +7,7 @@ var score = 0;
 var moves = 0;
 var startTime = 0;
 var timePlayed = 0;
+var gameOn = false;
 
 /*
  * Display the cards on the page
@@ -31,9 +32,14 @@ var timePlayed = 0;
  }
 
 function startNew() {
- score = 0;
+var modal = document.getElementById('victory');
+   modal.style.display = "none";
+   score = 0;
  moves = 0;
+ justFlipped = [];
+ var allFlipped = [];
  timePlayed = 0;
+ gameOn = true;
  startTime = Date.now();
            document.querySelector(".moves").innerText = moves;
   var deckOfCards = shuffle(["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube",
@@ -44,20 +50,14 @@ function startNew() {
 
     var cardCounter = 0;
     while (shuffledDeck.firstChild){
-    	shuffledDeck.removeChild(shuffledDeck.firstChild)};
+      shuffledDeck.removeChild(shuffledDeck.firstChild)};
     var starReset = document.querySelector(".stars");
     while (starReset.firstChild){ /*removes any leftover stars*/
       starReset.removeChild(starReset.firstChild)
     };
     var starList = [document.createElement("li"), document.createElement("li"), document.createElement("li")]
     var starItems = [document.createElement("i"), document.createElement("i"), document.createElement("i")]
-    var i= 0;
-    while (i < 3){
-      starItems[i].className = "fa fa-star";
-      starList[i].appendChild(starItems[i]);
-      starReset.appendChild(starList[i]);
-      i++;
-    }
+    drawTheStars(starReset, 4);
     deckOfCards.forEach(function(card){
         var nextUp = document.createElement("li")
         var thing1 = document.createElement("i");
@@ -70,6 +70,47 @@ function startNew() {
     });
     }
 
+function endingGame(countingStars){
+  // Get the modal
+  gameOn = false;
+  var modal = document.getElementById('victory');
+  var insideModal = document.querySelector(".modal-content");
+  var finalScore = document.querySelector(".score-panel").cloneNode(true);
+
+  insideModal.insertBefore(finalScore, insideModal.firstChild);
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("playAgain")[0];
+  /*document.querySelector(".howlong").innerText = timePlayed;
+  document.querySelector(".howmany").innerText = moves;*/
+  modal.style.display = "block";
+  var victoryButton = document.getElementById("playAgain");
+  victoryButton.onclick = function(){
+
+
+    startNew();
+  }
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+}
+
+function drawTheStars(starReset, countingStars){
+  /*takes UL object and a number and adds the number of stars to the UL */
+  var i = 0;
+  while(i<countingStars){
+  var starList = document.createElement("li");
+  var starItems = document.createElement("i");
+    starItems.className = "fa fa-star";
+    starList.appendChild(starItems);
+    starReset.appendChild(starList);
+    i+=1;
+  }
+      return(starReset);
+}
 
 function clickACard(cardItem) {
     /* This function will fire when the user clicks a card and flip the card over, add identify of flipped card to flipList */
@@ -91,7 +132,6 @@ function clickACard(cardItem) {
               while (justFlipped.length > 0){
                 var nubbin = justFlipped.pop();
                 wholeDeck[nubbin].setAttribute('class', "card");
-
               }}, 1500);
           } else {
             while (justFlipped.length > 0){
@@ -107,47 +147,14 @@ function clickACard(cardItem) {
           while (starReset.firstChild){ /*removes any leftover stars*/
             starReset.removeChild(starReset.firstChild)
           };
-          if (moves<25){
-          var starList = document.createElement("li");
-          var starItems = document.createElement("i");
-            starItems.className = "fa fa-star";
-            starList.appendChild(starItems);
-            starReset.appendChild(starList);
-          }
-          if (moves<20){
-          var starList = document.createElement("li");
-          var starItems = document.createElement("i");
-            starItems.className = "fa fa-star";
-            starList.appendChild(starItems);
-            starReset.appendChild(starList);
-          }
-          if (moves<16){
-          var starList = document.createElement("li");
-          var starItems = document.createElement("i");
-            starItems.className = "fa fa-star";
-            starList.appendChild(starItems);
-            starReset.appendChild(starList);
-          }
-          if (allFlipped.length == wholeDeck.length) {
-            // Get the modal
-            var modal = document.getElementById('victory');
 
-            // Get the <span> element that closes the modal
-            var span = document.getElementsByClassName("playAgain")[0];
-            document.querySelector(".howlong").innerText = timePlayed;
-            document.querySelector(".howmany").innerText = moves;
-            modal.style.display = "block";
-            var victoryButton = document.getElementById("playAgain");
-            victoryButton.onclick = function(){
-              modal.style.display = "none";
-              startNew();
-            }
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function(event) {
-              if (event.target == modal) {
-                modal.style.display = "none";
-              }
-            }
+          var countingStars = 2;
+          if (moves<25){countingStars = 3}
+          if (moves<18){countingStars = 4}
+          drawTheStars(starReset, countingStars)
+
+          if (allFlipped.length == wholeDeck.length) {
+            endingGame(countingStars);
             }
 }
 
@@ -156,16 +163,17 @@ function clickACard(cardItem) {
 
 startNew(); /* initializes new game */
 setInterval(function(){
-  timePlayed = Math.floor((Date.now() - startTime) / 1000);
+  if (gameOn){
+  timePlayed = Math.floor((Date.now() - startTime) / 1000);}
   document.querySelector(".timer").innerText = timePlayed ;
 }, 1000);
 document.addEventListener('click', function (event) {
-	if (event.target.matches('.fa-repeat')) {
-		startNew();
-	}
-	if (event.target.matches('.card')) {
-		clickACard(event.target);
-	}
+  if (event.target.matches('.fa-repeat')) {
+    startNew();
+  }
+  if (event.target.matches('.card')) {
+    clickACard(event.target);
+  }
 }, false);
 
 /*
